@@ -13,19 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('cellphone');
-            $table->string('avatar');
-            $table->string('status')->default(1);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('provider_name');
-            $table->rememberToken();
-            $table->softDeletes();
+            $table->string('code');
 
+            $table->enum('type',['amount','percentage']);
+
+            $table->unsignedInteger('amount')->nullable();
+            $table->unsignedInteger('percentage')->nullable();
+
+            $table->timestamp('expired_at');
+            $table->text('description')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('coupons');
     }
 };

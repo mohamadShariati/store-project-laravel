@@ -20,6 +20,7 @@ return new class extends Migration
 
             $table->primary(['product_id','tag_id']);
 
+
             $table->softDeletes();
             $table->timestamps();
         });

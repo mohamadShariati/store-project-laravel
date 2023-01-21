@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use Hekmatinasser\Verta\VertaServiceProvider;
+use Hekmatinasser\Verta\Verta;
 
 return [
 
@@ -82,7 +84,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'fa',
 
     /*
     |--------------------------------------------------------------------------
@@ -194,6 +196,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // Hekmatinasser\Verta\Laravel\VertaServiceProvider::class,
 
     ],
 
@@ -208,8 +211,21 @@ return [
     |
     */
 
+
+
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Verta' => Hekmatinasser\Verta\Laravel\VertaServiceProvider::class,
     ])->toArray(),
+
+
+
+
+    'alias' => [
+        'Verta' => Hekmatinasser\Verta\Verta::class,
+    ]
+
+
+
 
 ];

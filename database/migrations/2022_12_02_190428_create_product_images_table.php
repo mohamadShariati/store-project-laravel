@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
+            $table->string('image');
             $table->foreignId('product_id')->constrained('products','id')->onDelete('cascade')->onUpdate('cascade');
             $table->softDeletes();
             $table->timestamps();

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Termwind\Components\Dd;
 
 class BrandController extends Controller
 {
@@ -15,7 +17,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-
+        $brands=Brand::latest()->paginate(20);
+        return view('admin.brands.index',compact('brands'));
     }
 
     /**
@@ -36,7 +39,18 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+
+        $request->validate([
+            'name'=>'required|string|max:15',
+            'is_active'=>'numeric|in:0,1'
+        ]);
+        $brand=Brand::create([
+            'name'=>$request->name,
+            'is_active'=>$request->is_active
+        ]);
+        alert()->success('با تشکر','برند با موفقیت ایجاد شد');
+
+        return redirect()->route('admin.brands.index');
     }
 
     /**
@@ -45,9 +59,9 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Brand $brand)
     {
-        //
+        return view('admin.brands.show',compact('brand'));
     }
 
     /**
@@ -58,7 +72,7 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        //
+        return view('admin.brands.edit',compact('brand'));
     }
 
     /**
@@ -70,7 +84,17 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        //
+        $request->validate([
+            'name'=>'required|string|max:15',
+            'is_active'=>'numeric|in:0,1'
+        ]);
+
+        $brand->update(
+            $request->all()
+        );
+        alert()->success('با تشکر','برند با موفقیت ویرایش شد');
+        return redirect()->route('admin.brands.index');
+
     }
 
     /**
@@ -81,6 +105,8 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        //
+        $brand->delete();
+        alert()->success('با تشکر','برند با موفقیت حذف شد');
+        return redirect()->route('admin.brands.index');
     }
 }

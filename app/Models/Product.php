@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\ProductAttribute;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,22 @@ class Product extends Model
 
     protected $table = 'products';
     protected $guarded = [];
+    protected $appends = ['quantity_check','sale_check','price_check'];
+
+    public function getQuantityCheckAttribute()
+    {
+        return $this->variations()->where('quantity','>',0)->first() ?? 0;
+    }
+
+    public function getSaleCheckAttribute()
+    {
+        return $this->variations()->where('quantity','>',0)->where('sale_price','!=',null)->where('date_on_sale_from','<',Carbon::now())->where('date_on_sale_to','>',Carbon::now())->orderby('sale_price')->first() ?? false;
+    }
+
+    public function getPriceCheckAttribute()
+    {
+        return $this->variations()->orderby('price')->first();
+    }
 
     public function tags()
     {
@@ -61,5 +78,44 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(ProductRate::class);
+    }
+
+    public function scopeFilter($query)
+    {
+        if(request()->has('attribute'))
+        {
+             foreach (request()->attribute as $attribute) {
+                $query->whereHas('attributes',function($query) use ($attribute){
+                    foreach(explode('-',$attribute) as $index => $item)
+                    {
+                        if ($index==0) {
+                            $query->where('value',$item);
+                        }else{
+                            $query->orWhere('value',$item);
+                        }
+                    }
+                });
+            }
+        }
+
+
+        if(request()->has('variation')){
+            $query->whereHas('variations',function($query){
+                foreach(explode('-',request()->variation) as $index => $variation){
+                    if($index == 0){
+                        $query->where('value',$variation);
+                    }else{
+                        $query->orWhere('value',$variation);
+                    }
+                }
+            });
+        }
+
+        return $query;
     }
 }

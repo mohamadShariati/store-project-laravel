@@ -28,7 +28,7 @@
                         <label for="is_active">وضعیت</label>
                         <select class="form-control" id="is_active" name="is_active">
                             <option value="1" {{ $brand->getRawOriginal('is_active') ? 'selected' : '' }}>فعال</option>
-                            <option value="0" {{ $brand->getRawOriginal('is_active') ? 'selected' : '' }} >غیرفعال</option>
+                            <option value="0" {{ $brand->getRawOriginal('is_active') ? '' : 'selected' }} >غیرفعال</option>
                         </select>
                     </div>
                 </div>

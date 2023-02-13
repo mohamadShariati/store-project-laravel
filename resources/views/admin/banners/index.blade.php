@@ -1,7 +1,7 @@
 @extends('admin.layouts.admin')
 
 @section('title')
-    index products
+    index banner
 @endsection
 
 @section('content')
@@ -9,72 +9,81 @@
     <!-- Content Row -->
     <div class="row">
 
-        <div class="col-xl-12 col-md-12 mb-4 p-md-5 bg-white">
-            <div class="d-flex justify-content-between mb-4">
-                <h5 class="font-weight-bold">لیست محصولات ها ({{ $products->total() }})</h5>
-                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.products.create') }}">
+        <div class="col-xl-12 col-md-12 mb-4 p-4 bg-white">
+            <div class="d-flex flex-column text-center flex-md-row justify-content-md-between mb-4">
+                <h5 class="font-weight-bold mb-3 mb-md-0">لیست بنر ها ({{ $banners->total() }})</h5>
+                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.banners.create') }}">
                     <i class="fa fa-plus"></i>
-                    ایجاد محصول
+                    ایجاد بنر
                 </a>
             </div>
 
-            <div>
+            <div class="table-responsive">
                 <table class="table table-bordered table-striped text-center">
 
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>نام</th>
-                            <th>نام برند</th>
-                            <th>نام دسته بندی</th>
+                            <th>تصویر</th>
+                            <th>عنوان</th>
+                            <th>متن</th>
+                            <th>الویت</th>
                             <th>وضعیت</th>
+                            <th>نوع</th>
+                            <th>متن دکمه</th>
+                            <th>لینک دکمه</th>
+                            <th>آیکون دکمه</th>
                             <th>عملیات</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($products as $key => $product)
+                        @foreach ($banners as $key => $banner)
                             <tr>
                                 <th>
-                                    {{ $products->firstItem() + $key }}
+                                    {{ $banners->firstItem() + $key }}
                                 </th>
                                 <th>
-                                    <a href="{{ route('admin.products.show', ['product' => $product->id]) }}">
-                                        {{ $product->name }}
+                                    <a target="_blank" href="{{ url( '/upload/files/banners/images/'.$banner->image ) }}">
+                                        {{$banner->image}}
                                     </a>
                                 </th>
                                 <th>
-                                    <a href="{{ route('admin.brands.show', ['brand' => $product->brand->id]) }}">
-                                        {{ $product->brand->name }}
-                                    </a>
+                                    {{ $banner->title }}
                                 </th>
                                 <th>
-                                    {{ $product->category->name }}
+                                    {{ $banner->text }}
+                                </th>
+                                <th>
+                                    {{ $banner->priority }}
                                 </th>
                                 <th>
                                     <span
-                                        class="{{ $product->getRawOriginal('is_active') ? 'text-success' : 'text-danger' }}">
-                                        {{ $product->is_active }}
+                                        class="{{ $banner->getRawOriginal('is_active') ? 'text-success' : 'text-danger' }}">
+                                        {{ $banner->is_active }}
                                     </span>
                                 </th>
                                 <th>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            عملیات
-                                        </button>
-                                        <div class="dropdown-menu">
+                                    {{ $banner->type }}
+                                </th>
+                                <th>
+                                    {{ $banner->button_text }}
+                                </th>
+                                <th>
+                                    {{ $banner->button_link }}
+                                </th>
+                                <th>
+                                    {{ $banner->button_icon }}
+                                </th>
 
-                                            <a href="{{ route('admin.products.edit' , ['product' => $product->id]) }}"
-                                                class="dropdown-item text-right"> ویرایش محصول </a>
+                                <th>
+                                    <form action="{{ route('admin.banners.destroy', ['banner' => $banner->id]) }}">
+                                        @csrf
+                                        @method('DELETE')
 
-                                            <a href="{{ route('admin.products.images.edit' , ['product' => $product->id]) }}"
-                                                class="dropdown-item text-right"> ویرایش تصاویر </a>
-
-                                            <a href="{{ route('admin.products.category.edit' , ['product' => $product->id]) }}"
-                                                class="dropdown-item text-right"> ویرایش دسته بندی و ویژگی </a>
-
-                                        </div>
-                                    </div>
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">حذف</button>
+                                    </form>
+                                    <a class="btn btn-sm btn-outline-info mr-3 mt-2"
+                                        href="{{ route('admin.banners.edit', ['banner' => $banner->id]) }}">ویرایش</a>
                                 </th>
                             </tr>
                         @endforeach
@@ -83,7 +92,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-5">
-                {{ $products->render() }}
+                {{ $banners->render() }}
             </div>
         </div>
     </div>

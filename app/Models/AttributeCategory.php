@@ -12,4 +12,6 @@ class AttributeCategory extends Model
 
     protected $table = 'attribute_category';
     protected $guarded = [];
+
+
 }

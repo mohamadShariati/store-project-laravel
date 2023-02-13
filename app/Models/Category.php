@@ -32,11 +32,18 @@ class Category extends Model
 
     public function children()
     {
-        return $this->hasMany($this,'parent_id')->with('childeren');
+        return $this->hasMany($this,'parent_id')->with('children');
     }
 
     public function attributes()
     {
         return $this->belongsToMany(Attribute::class,'attribute_category');
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+
 }

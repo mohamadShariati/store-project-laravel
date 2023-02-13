@@ -89,7 +89,7 @@
                         <label for="parent_id">والد</label>
                         <select class="form-control" id="parent_id" name="parent_id">
                             <option value="0">بدون والد</option>
-                            @foreach ($parentCategories as $parentCategory)
+                            @foreach ($categories as $parentCategory)
                                 <option value="{{ $parentCategory->id }}">{{ $parentCategory->name }}</option>
                             @endforeach
                         </select>

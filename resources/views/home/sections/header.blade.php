@@ -43,7 +43,7 @@
                                 </li>
 
                                 <li class="angle-shape">
-                                    <a href="#"> صفحه اصلی </a>
+                                    <a href="{{route('home.index')}}"> صفحه اصلی </a>
                                 </li>
                             </ul>
                         </nav>

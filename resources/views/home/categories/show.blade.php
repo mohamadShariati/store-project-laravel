@@ -5,87 +5,95 @@
 @endsection
 
 @section('script')
-    <script>
-        function filter() {
+<script>
+    function filter() {
 
-            let attributes = @json($attributes);
-            attributes.map(attribute => {
+        let attributes = @json($attributes);
+        attributes.map(attribute => {
 
-                let valueAttribute = $(`.attribute-${attribute.id}:checked`).map(function() {
-                    return this.value;
-                }).get().join('-');
-
-                if (valueAttribute == "") {
-                    $(`#filter-attribute-${attribute.id}`).prop('disabled', true);
-                } else {
-                    $(`#filter-attribute-${attribute.id}`).val(valueAttribute);
-                }
-
-            });
-
-            let variation = $('.variation:checked').map(function() {
+            let valueAttribute = $(`.attribute-${attribute.id}:checked`).map(function() {
                 return this.value;
             }).get().join('-');
-            if (variation == "") {
-                $('#filter-variation').prop('disabled', true);
+
+            if (valueAttribute == "") {
+                $(`#filter-attribute-${attribute.id}`).prop('disabled', true);
             } else {
-                $('#filter-variation').val(variation);
+                $(`#filter-attribute-${attribute.id}`).val(valueAttribute);
             }
 
-            let sortBy = $('#sort-by').val();
-            if (sortBy == "default") {
-                $('#filter-sort-by').prop('disabled', true);
-            } else {
-                $('#filter-sort-by').val(sortBy);
-            }
+        });
 
-            let search = $('#search-input').val();
-            if (search == "") {
-                $('#filter-search').prop('disabled', true);
-            } else {
-                $('#filter-search').val(search);
-            }
-
-            $('#filter-form').submit();
+        let variation = $('.variation:checked').map(function() {
+            return this.value;
+        }).get().join('-');
+        if (variation == "") {
+            $('#filter-variation').prop('disabled', true);
+        } else {
+            $('#filter-variation').val(variation);
         }
 
-        $('#filter-form').on('submit', function(event) {
-            event.preventDefault();
-            let currentUrl = '{{ url()->current() }}';
-            let url = currentUrl + '?' + decodeURIComponent($(this).serialize())
-            $(location).attr('href', url);
-        });
+        let sortBy = $('#sort-by').val();
+        if (sortBy == "default") {
+            $('#filter-sort-by').prop('disabled', true);
+        } else {
+            $('#filter-sort-by').val(sortBy);
+        }
 
-        $('.variation-select').on('change' , function(){
-            let variation = JSON.parse(this.value);
-            let variationPriceDiv = $('.variation-price');
-            variationPriceDiv.empty();
+        let search = $('#search-input').val();
+        if (search == "") {
+            $('#filter-search').prop('disabled', true);
+        } else {
+            $('#filter-search').val(search);
+        }
 
-            if(variation.is_sale){
-                let spanSale = $('<span />' , {
-                    class : 'new',
-                    text : toPersianNum(number_format(variation.sale_price)) + ' تومان'
-                });
-                let spanPrice = $('<span />' , {
-                    class : 'old',
-                    text : toPersianNum(number_format(variation.price)) + ' تومان'
-                });
+        $('#filter-form').submit();
+    }
 
-                variationPriceDiv.append(spanSale);
-                variationPriceDiv.append(spanPrice);
-            }else{
-                let spanPrice = $('<span />' , {
-                    class : 'new',
-                    text : toPersianNum(number_format(variation.price)) + ' تومان'
-                });
-                variationPriceDiv.append(spanPrice);
-            }
+    $('#filter-form').on('submit', function(event) {
+        event.preventDefault();
+        let currentUrl = '{{ url()->current() }}';
+        let url = currentUrl + '?' + decodeURIComponent($(this).serialize())
+        $(location).attr('href', url);
+    });
 
-            $('.quantity-input').attr('data-max' , variation.quantity);
-            $('.quantity-input').val(1);
+    $('.variation-select').on('change' , function(){
+        let variation = JSON.parse(this.value);
+        let variationPriceDiv = $('.variation-price');
+        variationPriceDiv.empty();
 
-        });
-    </script>
+        if(variation.is_sale){
+            let spanSale = $('<span />' , {
+                class : 'new',
+                text : toPersianNum(number_format(variation.sale_price)) + ' تومان'
+            });
+            let spanPrice = $('<span />' , {
+                class : 'old',
+                text : toPersianNum(number_format(variation.price)) + ' تومان'
+            });
+
+            variationPriceDiv.append(spanSale);
+            variationPriceDiv.append(spanPrice);
+        }else{
+            let spanPrice = $('<span />' , {
+                class : 'new',
+                text : toPersianNum(number_format(variation.price)) + ' تومان'
+            });
+            variationPriceDiv.append(spanPrice);
+        }
+
+        $('.quantity-input').attr('data-max' , variation.quantity);
+        $('.quantity-input').val(1);
+
+    });
+
+    $('#pagination li a').map(function(){
+        let decodeUrl = decodeURIComponent($(this).attr('href'));
+        if( $(this).attr('href') !== undefined ){
+            $(this).attr('href' , decodeUrl);
+        }
+    });
+
+</script>
 @endsection
 
 @section('content')
@@ -225,7 +233,7 @@
                                                 class="ht-product ht-product-action-on-hover ht-product-category-right-bottom mb-30">
                                                 <div class="ht-product-inner">
                                                     <div class="ht-product-image-wrap">
-                                                        <a href="product-details.html" class="ht-product-image">
+                                                        <a href="{{route('home.products.show',$product->slug)}}" class="ht-product-image">
                                                             <img src="{{ asset('/upload/files/products/images/' . $product->primary_image) }}"
                                                                 alt="{{ $product->name }}" />
                                                         </a>
@@ -301,13 +309,8 @@
                                     </div>
                             </div>
 
-                            <div class="pro-pagination-style text-center mt-30">
-                                <ul class="d-flex justify-content-center">
-                                    <li><a class="prev" href="#"><i class="sli sli-arrow-left"></i></a></li>
-                                    <li><a class="active" href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a class="next" href="#"><i class="sli sli-arrow-right"></i></a></li>
-                                </ul>
+                            <div id="pagination" class="pro-pagination-style text-center mt-30">
+                                {{$products->withQueryString()->links()}}
                             </div>
 
                         </div>
@@ -372,7 +375,7 @@
                                      <span>3 دیدگاه</span>
                                  </div>
                                  <p class="text-right">
-                                     {{ $product->descriptio }}
+                                     {{ $product->description }}
                                  </p>
                                  <div class="pro-details-list text-right">
                                      <ul class="text-right">

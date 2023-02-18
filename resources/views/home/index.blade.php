@@ -137,7 +137,7 @@
                         <div class="ht-product ht-product-action-on-hover ht-product-category-right-bottom mb-30">
                             <div class="ht-product-inner">
                                 <div class="ht-product-image-wrap">
-                                    <a href="product-details.html" class="ht-product-image">
+                                    <a href="{{route('home.products.show',$product->slug)}}" class="ht-product-image">
                                         <img src="{{ asset('/upload/files/products/images/' . $product->primary_image) }}" alt="{{ $product->name }}" />
                                     </a>
                                     <div class="ht-product-action">
@@ -351,7 +351,7 @@
                     <div class="ht-product ht-product-action-on-hover ht-product-category-right-bottom mb-30">
                         <div class="ht-product-inner">
                             <div class="ht-product-image-wrap">
-                                <a href="product-details.html" class="ht-product-image">
+                                <a href="#" class="ht-product-image">
                                     <img src="assets/img/product/product-1.svg" alt="Universal Product Style" />
                                 </a>
                                 <div class="ht-product-action">
@@ -812,7 +812,7 @@
                                     <span>3 دیدگاه</span>
                                 </div>
                                 <p class="text-right">
-                                    {{ $product->descriptio }}
+                                    {{ $product->description }}
                                 </p>
                                 <div class="pro-details-list text-right">
                                     <ul class="text-right">

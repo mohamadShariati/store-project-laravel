@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\ProductAttribute;
-use Carbon\Carbon;
+use App\Models\ProductVariation;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -114,6 +115,45 @@ class Product extends Model
                     }
                 }
             });
+        }
+
+        if (request()->has('sortBy')) {
+            $sortBy=request()->sortBy;
+
+            switch($sortBy)
+            {
+                case 'max':
+                    $query->orderByDesc(
+                        ProductVariation::select('price')->whereColumn('product_variations.product_id','products.id')->orderBy('sale_price','desc')->take(1)
+                    );
+                    break;
+                case 'min':
+                    $query->orderBy(ProductVariation::select('price')->whereColumn('product_variations.product_id','products.id')->orderBy('sale_price','asc')->take(1));
+                    break;
+                case 'latest':
+                    $query->latest();
+                    break;
+                case 'oldest':
+                    $query->oldest();
+                    break;
+                default:
+                $query;
+                break;
+            }
+
+
+
+        }
+
+        return $query;
+    }
+
+    public function scopeSearch($query)
+    {
+        $keyword=request()->search;
+
+        if (request()->has('search') && trim($keyword)!='') {
+            $query->where('name','LIKE','%'.trim($keyword).'%');
         }
 
         return $query;

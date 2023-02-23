@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Home\CategoryController as HomeCategoryController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
@@ -55,3 +56,11 @@ Route::get('/',[HomeController::class,'index'])->name('home.index');
 Route::get('/categories/{category:slug}',[HomeCategoryController::class,'show'])->name('home.categories.show');
 
 Route::get('/products/{product:slug}',[HomeProductController::class,'show'])->name('home.products.show');
+
+Route::get('/test',function(){
+    auth()->logout();
+    return redirect()->route('home.index');
+});
+
+Route::get('/login/{provider}',[AuthController::class,'redirectToProvider'])->name('provider.login');
+Route::get('/login/{provider}/callback',[AuthController::class,'handleProviderCallback']);

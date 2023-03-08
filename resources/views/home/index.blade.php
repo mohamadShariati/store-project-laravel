@@ -111,7 +111,7 @@
     <div class="product-area pb-70">
         <div class="container">
             <div class="section-title text-center pb-40">
-                <h2> لورم ایپسوم </h2>
+                <h2> لورم11111 ایپسوم </h2>
                 <p>
                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.
                     چاپگرها و متون
@@ -148,13 +148,40 @@
                                                         class="ht-product-action-tooltip"> مشاهده سریع
                                                     </span></a>
                                             </li>
+
                                             <li>
-                                                <a href="#"><i class="sli sli-heart"></i><span
+                                                @auth
+                                                  @if ($product->checkUserWishlist(auth()->user()->id))
+                                                  <a href="{{route('home.wishlist.remove',$product->id)}}">
+                                                    <i class="fas fa-heart" style="color: red"></i>
+                                                    <span
+                                                        class="ht-product-action-tooltip"> حذف از
+                                                        علاقه مندی ها </span>
+                                                  </a>
+                                                  @else
+                                                  <a href="{{route('home.wishlist.add',$product->id)}}">
+                                                    <i class="sli sli-heart"></i>
+                                                    <span
                                                         class="ht-product-action-tooltip"> افزودن به
-                                                        علاقه مندی ها </span></a>
+                                                        علاقه مندی ها </span>
+                                                </a>
+                                                  @endif
+                                                @else
+
+                                                <a href="{{route('home.wishlist.add',$product->id)}}">
+                                                    <i class="sli sli-heart"></i>
+                                                    <span
+                                                        class="ht-product-action-tooltip"> افزودن به
+                                                        علاقه مندی ها </span>
+                                                </a>
+
+                                                @endauth
                                             </li>
+
+
+
                                             <li>
-                                                <a href="#"><i class="sli sli-refresh"></i><span
+                                                <a href="{{route('home.compare.add',$product->id)}}"><i class="sli sli-refresh"></i><span
                                                         class="ht-product-action-tooltip"> مقایسه
                                                     </span></a>
                                             </li>
@@ -209,7 +236,7 @@
                         <!--Product End-->
                     </div>
                 </div>
-                <div id="product-2" class="tab-pane active">
+                {{-- <div id="product-2" class="tab-pane active">
                     <div class="ht-products product-slider-active owl-carousel">
                         <!--Product Start-->
                         @foreach ($products as $product)
@@ -287,7 +314,7 @@
                         @endforeach
                         <!--Product End-->
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -335,7 +362,7 @@
         </div>
     </div>
 
-    <div class="product-area pt-95 pb-70">
+    {{-- <div class="product-area pt-95 pb-70">
         <div class="container">
             <div class="section-title text-center pb-60">
                 <h2>لورم ایپسوم</h2>
@@ -701,7 +728,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="banner-area pb-120">
         <div class="container">
@@ -809,7 +836,7 @@
                                         data-rating-value="{{ ceil($product->rates->avg('rate')) }}">
                                     </div>
                                     <span class="mx-3">|</span>
-                                    <span>3 دیدگاه</span>
+                                    <span>{{ $product->approvedComments()->count() }} دیدگاه</span>
                                 </div>
                                 <p class="text-right">
                                     {{ $product->description }}
@@ -858,7 +885,23 @@
                                             <a href="#">افزودن به سبد خرید</a>
                                         </div>
                                         <div class="pro-details-wishlist">
-                                            <a title="Add To Wishlist" href="#"><i class="sli sli-heart"></i></a>
+                                            @auth
+                                                  @if ($product->checkUserWishlist(auth()->user()->id))
+                                                  <a href="{{route('home.wishlist.remove',$product->id)}}">
+                                                    <i class="fas fa-heart" style="color: red"></i>
+                                                  </a>
+                                                  @else
+                                                  <a href="{{route('home.wishlist.add',$product->id)}}">
+                                                    <i class="sli sli-heart"></i>
+                                                  </a>
+                                                  @endif
+                                                @else
+
+                                                <a href="{{route('home.wishlist.add',$product->id)}}">
+                                                    <i class="sli sli-heart"></i>
+                                                 </a>
+
+                                                @endauth
                                         </div>
                                         <div class="pro-details-compare">
                                             <a title="Add To Compare" href="#"><i class="sli sli-refresh"></i></a>

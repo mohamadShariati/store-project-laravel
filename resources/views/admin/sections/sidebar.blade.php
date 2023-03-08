@@ -54,11 +54,19 @@
           <a class="collapse-item" href="{{route('admin.products.index')}}"> محصولات</a>
           <a class="collapse-item" href="{{route('admin.attributes.index')}}">ویژگی ها</a>
           <a class="collapse-item" href="{{route('admin.categories.index')}}">دسته بندی ها</a>
-          {{-- <a class="collapse-item" href="{{route('admin.products.images.edit')}}">ویرایش تصاویر</a> --}}
           <a class="collapse-item" href="{{route('admin.tags.index')}}">تگ ها</a>
+          <a class="collapse-item" href="{{route('admin.comments.index')}}">کامنت ها</a>
+
         </div>
       </div>
     </li>
+
+    <!-- Nav Item - banners -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.banners.index')}}">
+          <i class="fas fa-image"></i>
+          <span>بنر ها</span></a>
+      </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Brand;
+use App\Models\Comment;
 use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\ProductAttribute;
@@ -86,6 +87,11 @@ class Product extends Model
         return $this->hasMany(ProductRate::class);
     }
 
+    public function approvedComments()
+    {
+        return $this->hasMany(Comment::class)->where('approved',1);
+    }
+
     public function scopeFilter($query)
     {
         if(request()->has('attribute'))
@@ -157,5 +163,10 @@ class Product extends Model
         }
 
         return $query;
+    }
+
+    public function checkUserWishlist($userId)
+    {
+        return $this->hasMany(Wishlist::class)->where('user_id',$userId)->exists();
     }
 }

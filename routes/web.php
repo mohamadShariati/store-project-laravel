@@ -6,17 +6,18 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Home\CompareController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Home\WishlistController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Home\UserProfileController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Home\CartController;
+use App\Http\Controllers\Home\CommentController as HomeCommentController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Home\CategoryController as HomeCategoryController;
-use App\Http\Controllers\Home\CommentController as HomeCommentController;
-use App\Http\Controllers\Home\CompareController;
-use App\Http\Controllers\Home\UserProfileController;
-use App\Http\Controllers\Home\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,13 @@ Route::get('/compare',[CompareController::class,'index'])->name('home.compare.in
 Route::get('/add-to-compare/{product}',[CompareController::class,'add'])->name('home.compare.add');
 Route::get('/remove-from-compare/{product}',[CompareController::class,'remove'])->name('home.compare.remove');
 
+//CART
+Route::get('/cart',[CartController::class,'index'])->name('home.cart.index');
+Route::post('/add-to-cart',[CartController::class,'add'])->name('home.cart.add');
+Route::get('/remove-from-cart/{id}',[CartController::class,'remove'])->name('home.cart.remove');
+Route::get('/clear-cart',[CartController::class,'clear'])->name('home.cart.clear');
+Route::put('/update-cart',[CartController::class,'update'])->name('home.cart.update');
+
 Route::get('/products/{product:slug}',[HomeProductController::class,'show'])->name('home.products.show');
 
 Route::get('/test',function(){
@@ -91,6 +99,11 @@ Route::get('session',function(){
    dd(session()->get('compareProduct'));
 //    session()->forget('compareProduct');
 });
+
+// Route::get('/cart',function(){
+//     // \Cart::clear();
+//     dd(\Cart::getContent());
+// });
 
 Route::get('/login/{provider}',[AuthController::class,'redirectToProvider'])->name('provider.login');
 Route::get('/login/{provider}/callback',[AuthController::class,'handleProviderCallback']);

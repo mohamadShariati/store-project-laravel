@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xl-2 col-lg-2">
                     <div class="logo pt-40">
-                        <a href="{{route('home.index')}}">
+                        <a href="{{ route('home.index') }}">
                             <h3 class="font-weight-bold">Shariti.ir</h3>
                         </a>
                     </div>
@@ -28,12 +28,15 @@
                                     <ul class="mega-menu">
                                         @foreach ($parentCategories as $parentCategory)
                                             <li>
-                                                <a class="menu-title" href="{{route('home.categories.show',$parentCategory->slug)}}">{{ $parentCategory->name }}</a>
+                                                <a class="menu-title"
+                                                    href="{{ route('home.categories.show', $parentCategory->slug) }}">{{ $parentCategory->name }}</a>
                                                 <ul>
-                                                @foreach ($parentCategory->children as $childCategory)
-                                                    <li><a href="{{route('home.categories.show',$childCategory->slug)}}">{{$childCategory->name}}</a></li>
-                                                @endforeach
-                                             </ul>
+                                                    @foreach ($parentCategory->children as $childCategory)
+                                                        <li><a
+                                                                href="{{ route('home.categories.show', $childCategory->slug) }}">{{ $childCategory->name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
 
                                             </li>
                                         @endforeach
@@ -43,13 +46,18 @@
                                 </li>
 
                                 <li class="angle-shape">
-                                    <a href="{{route('home.index')}}"> صفحه اصلی </a>
+                                    <a href="{{ route('home.index') }}"> صفحه اصلی </a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                 </div>
+                @php
+                    $carts = \Cart::getContent();
+                    $totalQuantity=\Cart::getTotalQuantity();
+                    $total = \Cart::getTotal();
 
+                @endphp
                 <div class="col-xl-3 col-lg-3">
                     <div class="header-right-wrap pt-40">
                         <div class="header-search">
@@ -59,14 +67,18 @@
                             <button class="icon-cart-active">
                                 <span class="icon-cart">
                                     <i class="sli sli-bag"></i>
-                                    <span class="count-style">02</span>
+                                    @if (! \Cart::isEmpty())
+                                    <span class="count-style">{{ $carts->count() }}</span>
+                                    @endif
                                 </span>
 
-
+                                @if (! \Cart::isEmpty())
                                 <span class="cart-price">
-                                    500,000
+                                    {{ number_format($total) }}
                                 </span>
                                 <span>تومان</span>
+                                @endif
+
                             </button>
                             <div class="shopping-cart-content">
                                 <div class="shopping-cart-top">
@@ -74,49 +86,53 @@
                                     <h4>سبد خرید</h4>
                                 </div>
                                 <ul>
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"> لورم ایپسوم </a></h4>
-                                            <span>1 x 90.00</span>
-                                        </div>
 
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt=""
-                                                    src="assets/img/cart/cart-1.svg" /></a>
-                                            <div class="item-close">
-                                                <a href="#"><i class="sli sli-close"></i></a>
+                                    @foreach ($carts as $key => $cart)
+                                        <li class="single-shopping-cart">
+                                            <div class="shopping-cart-title">
+                                                <h4><a href="#"> {{ $cart->name }} </a></h4>
+                                                <span>{{ $cart->quantity }} x {{ number_format($cart->price)  }}</span>
+                                                <div style="direction: rtl">
+                                                    <p class="mb-0" style="font-size: 12px">
+                                                        {{ \App\Models\Attribute::find($cart->attributes->attribute_id)->name }}
+                                                        :
+                                                        {{ $cart->attributes->value }}
+                                                    </p>
+                                                    @if($cart->attributes->is_sale)
+                                                        <p style="font-size: 12px ; color:red">
+                                                            {{ $cart->attributes->persent_sale }}%
+                                                            تخفیف
+                                                        </p>
+                                                    @endif
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"> لورم ایپسوم </a></h4>
-                                            <span>1 x 9,000</span>
-                                        </div>
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt=""
-                                                    src="assets/img/cart/cart-2.svg" /></a>
-                                            <div class="item-close">
-                                                <a href="#"><i class="sli sli-close"></i></a>
+                                            <div class="shopping-cart-img">
+                                                <a href="{{route('home.products.show',$cart->associatedModel->slug)}}"><img alt=""
+                                                        src="{{asset('/upload/files/products/images/'.$cart->associatedModel->primary_image)}}" /></a>
+                                                <div class="item-close">
+                                                    <a href="{{route('home.cart.remove',['id'=>$key])}}"><i class="sli sli-close"></i></a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>
+                                    @endforeach
+
                                 </ul>
                                 <div class="shopping-cart-bottom">
                                     <div class="shopping-cart-total d-flex justify-content-between align-items-center"
                                         style="direction: rtl;">
+
                                         <h4>
                                             جمع کل :
                                         </h4>
                                         <span class="shop-total">
-                                            25,000 تومان
+                                            {{ number_format($total) }} تومان
                                         </span>
                                     </div>
                                     <div class="shopping-cart-btn btn-hover text-center">
                                         <a class="default-btn" href="checkout.html">
                                             ثبت سفارش
                                         </a>
-                                        <a class="default-btn" href="cart-page.html">
+                                        <a class="default-btn" href="{{route('home.cart.index')}}">
                                             سبد خرید
                                         </a>
                                     </div>
@@ -131,14 +147,14 @@
                             <div class="setting-content">
                                 <ul class="text-right">
                                     @auth
-                                    <li><a href="{{route('home.users_profile.index')}}">پروفایل</a></li>
+                                        <li><a href="{{ route('home.users_profile.index') }}">پروفایل</a></li>
                                     @else
-                                    <li><a href="{{route('login')}}">ورود</a></li>
-                                    <li>
-                                        <a href="{{route('register')}}">ایجاد حساب</a>
-                                    </li>
+                                        <li><a href="{{ route('login') }}">ورود</a></li>
+                                        <li>
+                                            <a href="{{ route('register') }}">ایجاد حساب</a>
+                                        </li>
                                     @endauth
-                                    <li><a href="{{route('home.compare.index')}}">مقایسه محصول</a></li>
+                                    <li><a href="{{ route('home.compare.index') }}">مقایسه محصول</a></li>
 
 
                                 </ul>
@@ -174,7 +190,7 @@
             <div class="row align-items-center">
                 <div class="col-6">
                     <div class="mobile-logo">
-                        <a href="index.html">
+                        <a href="{{route('home.index')}}">
                             <h4 class="font-weight-bold">Shariati.ir</h4>
                         </a>
                     </div>
@@ -185,63 +201,70 @@
                             <button class="icon-cart-active">
                                 <span class="icon-cart">
                                     <i class="sli sli-bag"></i>
-                                    <span class="count-style">02</span>
+                                    @if (! \Cart::isEmpty())
+                                    <span class="count-style">{{ $carts->count() }}</span>
+                                    @endif
                                 </span>
 
+                                @if (! \Cart::isEmpty())
                                 <span class="cart-price">
-                                    500,000
+                                    {{ number_format($total) }}
                                 </span>
                                 <span>تومان</span>
+                                @endif
                             </button>
                             <div class="shopping-cart-content">
                                 <div class="shopping-cart-top">
                                     <a class="cart-close" href="#"><i class="sli sli-close"></i></a>
                                     <h4>سبد خرید</h4>
                                 </div>
-                                <ul style="height: 400px;">
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"> لورم ایپسوم </a></h4>
-                                            <span>1 x 90.00</span>
-                                        </div>
+                                <ul>
+                                    @foreach ($carts as $key => $cart)
+                                        <li class="single-shopping-cart">
+                                            <div class="shopping-cart-title">
+                                                <h4><a href="#"> {{ $cart->name }} </a></h4>
+                                                <span>{{ $cart->quantity }} x {{ number_format($cart->price)  }}</span>
+                                                <div style="direction: rtl">
+                                                    <p class="mb-0" style="font-size: 12px">
+                                                        {{ \App\Models\Attribute::find($cart->attributes->attribute_id)->name }}
+                                                        :
+                                                        {{ $cart->attributes->value }}
+                                                    </p>
+                                                    @if($cart->attributes->is_sale)
+                                                        <p style="font-size: 12px ; color:red">
+                                                            {{ $cart->attributes->persent_sale }}%
+                                                            تخفیف
+                                                        </p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="shopping-cart-img">
+                                                <a href="{{route('home.products.show',$cart->associatedModel->slug)}}"><img alt=""
+                                                        src="{{asset('/upload/files/products/images/'.$cart->associatedModel->primary_image)}}" /></a>
+                                                <div class="item-close">
+                                                    <a href="{{route('home.cart.remove',['id'=>$key])}}"><i class="sli sli-close"></i></a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
 
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt=""
-                                                    src="assets/img/cart/cart-1.svg" /></a>
-                                            <div class="item-close">
-                                                <a href="#"><i class="sli sli-close"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="single-shopping-cart">
-                                        <div class="shopping-cart-title">
-                                            <h4><a href="#"> لورم ایپسوم </a></h4>
-                                            <span>1 x 9,000</span>
-                                        </div>
-                                        <div class="shopping-cart-img">
-                                            <a href="#"><img alt=""
-                                                    src="assets/img/cart/cart-2.svg" /></a>
-                                            <div class="item-close">
-                                                <a href="#"><i class="sli sli-close"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
                                 </ul>
                                 <div class="shopping-cart-bottom">
                                     <div class="shopping-cart-total d-flex justify-content-between align-items-center"
                                         style="direction: rtl;">
+
                                         <h4>
                                             جمع کل :
                                         </h4>
                                         <span class="shop-total">
-                                            25,000 تومان
+                                            {{ number_format($total) }} تومان
                                         </span>
                                     </div>
                                     <div class="shopping-cart-btn btn-hover text-center">
                                         <a class="default-btn" href="checkout.html">
                                             ثبت سفارش
                                         </a>
-                                        <a class="default-btn" href="cart-page.html">
+                                        <a class="default-btn" href="{{route('home.cart.index')}}">
                                             سبد خرید
                                         </a>
                                     </div>

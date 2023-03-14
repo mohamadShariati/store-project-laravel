@@ -106,6 +106,9 @@
                         </ul>
                     </div>
 
+                    <form action="{{route('home.cart.add')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{$product->id}}">
                     @if($product->quantity_check)
 
                         @php
@@ -119,7 +122,7 @@
                         <div class="pro-details-size-color text-right">
                             <div class="pro-details-size w-50">
                                 <span>{{ App\Models\Attribute::find($product->variations->first()->attribute_id)->name }}</span>
-                                <select class="form-control variation-select">
+                                <select name="variation" class="form-control variation-select">
                                     @foreach ($product->variations()->where('quantity' , '>' , 0)->get() as $variation)
                                         <option
                                         value="{{ json_encode($variation->only(['id' , 'quantity','is_sale' , 'sale_price' , 'price'])) }}"
@@ -135,7 +138,7 @@
                                 <input class="cart-plus-minus-box quantity-input" type="text" name="qtybutton" value="1" data-max="5" />
                             </div>
                             <div class="pro-details-cart">
-                                <a href="#">افزودن به سبد خرید</a>
+                                <button href="{{route('home.cart.add')}}">افزودن به سبد خرید</button>
                             </div>
                             <div class="pro-details-wishlist">
                                 @auth
@@ -166,6 +169,7 @@
                         </div>
                     @endif
 
+                    </form>
                     <div class="pro-details-meta">
                         <span>دسته بندی :</span>
                         <ul>

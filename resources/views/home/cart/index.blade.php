@@ -5,6 +5,8 @@
 @endsection
 
 @section('content')
+
+
     <div class="breadcrumb-area pt-35 pb-35 bg-gray" style="direction: rtl;">
         <div class="container">
             <div class="breadcrumb-content text-center">
@@ -42,7 +44,7 @@
                             $subTotal = \Cart::getSubTotal();
                             // dd($carts)
                         @endphp
-                        <form action="{{route('home.cart.update')}}" method="POST">
+                        <form action="{{ route('home.cart.update') }}" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="table-content table-responsive cart-table-content">
@@ -81,25 +83,28 @@
                                                     </span>
                                                     @if ($cart->attributes->is_sale)
                                                         <p style="font-size: 12px ; color:red">
-                                                            {{ $cart->attributes->persent_sale }}%
+                                                            {{ $cart->attributes->percent_sale }}%
                                                             تخفیف
                                                         </p>
                                                     @endif
                                                 </td>
                                                 <td class="product-quantity">
 
-                                                        <div class="cart-plus-minus">
-                                                            <input class="cart-plus-minus-box" type="text" name="qtybutton[{{$cart->id}}]"
-                                                                value="{{ $cart->quantity }}" data-max="{{$cart->attributes->quantity}}" />
-                                                        </div>
+                                                    <div class="cart-plus-minus">
+                                                        <input class="cart-plus-minus-box" type="text"
+                                                            name="qtybutton[{{ $cart->id }}]"
+                                                            value="{{ $cart->quantity }}"
+                                                            data-max="{{ $cart->attributes->quantity }}" />
+                                                    </div>
 
                                                 </td>
                                                 <td class="product-subtotal">
-                                                    {{number_format($cart->quantity * $cart->price)  }}
+                                                    {{ number_format($cart->quantity * $cart->price) }}
                                                     تومان
                                                 </td>
                                                 <td class="product-remove">
-                                                    <a href="{{route('home.cart.remove',$key)}}"><i class="sli sli-close"></i></a>
+                                                    <a href="{{ route('home.cart.remove', $key) }}"><i
+                                                            class="sli sli-close"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -130,10 +135,11 @@
                                         <h4 class="cart-bottom-title section-bg-gray"> کد تخفیف </h4>
                                     </div>
                                     <div class="discount-code">
-                                        <p> لورم ایپسوم متن ساختگی با تولید سادگی </p>
-                                        <form>
-                                            <input type="text" required="" name="name">
-                                            <button class="cart-btn-2" type="submit"> ثبت </button>
+                                        <p> کد تخفیق خود را وارد کنید </p>
+                                        <form action="{{ route('home.coupons.check') }}" method="POST">
+                                            @csrf
+                                            <input type="text" required="" name="code">
+                                            <button class="btn btn-danger" type="submit"> ثبت </button>
                                         </form>
                                     </div>
                                 </div>
@@ -147,42 +153,58 @@
                                     <h5>
                                         مبلغ سفارش :
                                         <span>
-                                            {{ number_format( \Cart::getTotal() + cartTotalSaleAmount() ) }}
+                                            {{ number_format(\Cart::getTotal() + cartTotalSaleAmount()) }}
                                             تومان
                                         </span>
                                     </h5>
 
-                                    @if(cartTotalSaleAmount() > 0)
-                                    <hr>
-                                    <h5>
-                                        مبلغ تخفیف کالا ها :
-                                        <span style="color: red">
-                                            {{ number_format( cartTotalSaleAmount() ) }}
-                                            تومان
-                                        </span>
-                                    </h5>
+                                    @if (cartTotalSaleAmount() > 0)
+                                        <hr>
+                                        <h5>
+                                            مبلغ تخفیف کالا ها :
+                                            <span style="color: red">
+                                                {{ number_format(cartTotalSaleAmount()) }}
+                                                تومان
+                                            </span>
+                                        </h5>
                                     @endif
 
                                     <div class="total-shipping">
                                         <h5>
                                             هزینه ارسال :
-                                            @if(cartTotalDeliveryAmount() == 0)
+                                            @if (cartTotalDeliveryAmount() == 0)
                                                 <span style="color: red">
                                                     رایگان
                                                 </span>
                                             @else
                                                 <span>
-                                                    {{ number_format( cartTotalDeliveryAmount() ) }}
+                                                    {{ number_format(cartTotalDeliveryAmount()) }}
                                                     تومان
                                                 </span>
                                             @endif
                                         </h5>
 
+                                        @if (session()->has('coupon'))
+
+                                            <hr>
+                                            <h5>
+                                                مبلغ کوپن تخفیف  :
+                                                <span style="color: red">
+                                                    {{session()->get('coupon.amount')}}
+
+                                                    تومان
+                                                </span>
+                                            </h5>
+                                        @endif
+
+
                                     </div>
+
+
                                     <h4 class="grand-totall-title">
                                         جمع کل:
                                         <span>
-                                            {{ number_format( \Cart::getTotal() + cartTotalDeliveryAmount() ) }}
+                                            {{ number_format(cartTotalAmount()) }}
                                             تومان
                                         </span>
                                     </h4>

@@ -61,6 +61,37 @@
       </div>
     </li>
 
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+    سفارشات
+    </div>
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrders" aria-expanded="true"
+          aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>  سفارشات </span>
+        </a>
+        <div id="collapseOrders" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+
+            <a class="collapse-item" href="{{route('admin.coupons.index')}}">کوپن های نخفیف</a>
+
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+    بنر ها
+    </div>
+
     <!-- Nav Item - banners -->
     <li class="nav-item">
         <a class="nav-link" href="{{route('admin.banners.index')}}">

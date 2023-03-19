@@ -6,15 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Coupon extends Model
+class Order extends Model
 {
     use HasFactory,SoftDeletes;
 
-    protected $guarded=[];
-    protected $table='coupons';
-
-    public function getTypeAttribute($type)
-    {
-        return $type == 'amount' ? 'مبلغی' : 'درصدی';
-    }
+    protected $table='orders';
+    protected $guarded = [];
 }

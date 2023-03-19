@@ -100,7 +100,7 @@
                                                     </p>
                                                     @if($cart->attributes->is_sale)
                                                         <p style="font-size: 12px ; color:red">
-                                                            {{ $cart->attributes->persent_sale }}%
+                                                            {{ $cart->attributes->percent_sale }}%
                                                             تخفیف
                                                         </p>
                                                     @endif
@@ -232,7 +232,7 @@
                                                     </p>
                                                     @if($cart->attributes->is_sale)
                                                         <p style="font-size: 12px ; color:red">
-                                                            {{ $cart->attributes->persent_sale }}%
+                                                            {{ $cart->attributes->percent_sale }}%
                                                             تخفیف
                                                         </p>
                                                     @endif

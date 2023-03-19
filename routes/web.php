@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Home\WishlistController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Home\UserProfileController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Home\CartController;
@@ -43,6 +44,7 @@ Route::prefix('admin-panel/management')->name('admin.')->group(function(){
     Route::resource('products', ProductController::class);
     Route::resource('banners',BannerController::class);
     Route::resource('comments',CommentController::class);
+    Route::resource('coupons',CouponController::class);
 
     //approve comment
     Route::get('/comments/{comment}/change-approve',[CommentController::class,'changeApproved'])->name('comments.change-approve');
@@ -87,6 +89,7 @@ Route::post('/add-to-cart',[CartController::class,'add'])->name('home.cart.add')
 Route::get('/remove-from-cart/{id}',[CartController::class,'remove'])->name('home.cart.remove');
 Route::get('/clear-cart',[CartController::class,'clear'])->name('home.cart.clear');
 Route::put('/update-cart',[CartController::class,'update'])->name('home.cart.update');
+Route::post('/check-coupon',[CartController::class,'checkCoupon'])->name('home.coupons.check');
 
 Route::get('/products/{product:slug}',[HomeProductController::class,'show'])->name('home.products.show');
 
@@ -96,8 +99,8 @@ Route::get('/test',function(){
 });
 
 Route::get('session',function(){
-   dd(session()->get('compareProduct'));
-//    session()->forget('compareProduct');
+//    dd(session()->get('compareProduct'));
+   session()->forget('coupon');
 });
 
 // Route::get('/cart',function(){

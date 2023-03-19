@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Home;
 
 use Cart;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Product;
 use App\Models\ProductVariation;
 use App\Models\User;
+use Carbon\Carbon;
 use Darryldecode\Cart\Cart as CartCart;
 use Illuminate\Http\Request;
 
@@ -98,8 +100,38 @@ class CartController extends Controller
                     'value' => $quantity
                 ),
         ));
+     }
+     return redirect()->back();
     }
-    return redirect()->back();
+
+    public function checkCoupon(Request $request)
+    {
+
+        $request->validate([
+            'code'=>'required'
+        ]);
+
+        if(!auth()->check())
+        {
+            alert()->warning('دقت کنید','ابتدا باید در سایت لاگین کنید');
+            return redirect()->back();
+        }
+
+        $result=checkCoupon($request->code);
+
+        if(array_key_exists('error',$result))
+        {
+            alert()->warning('دقت کنید',$result['error']);
+            return redirect()->back();
+        }
+
+        if(array_key_exists('success',$result))
+        {
+            alert()->success('کوپن تخفبف برای شما فعال شد');
+            return redirect()->back();
+        }
+
+
     }
 
 

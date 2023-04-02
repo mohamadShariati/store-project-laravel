@@ -48,7 +48,7 @@ class CartController extends Controller
             Cart::add(array(
                 'id' => $rowId,
                 'name' => $product->name,
-                'price' => $productVariation->sale_price ? $productVariation->sale_price : $productVariation->price,
+                'price' => $productVariation->is_sale ? $productVariation->sale_price : $productVariation->price,
                 'quantity' => $request->qtybutton,
                 'attributes' => $productVariation->toArray(),
                 'associatedModel' => $product

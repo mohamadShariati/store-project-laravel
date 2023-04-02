@@ -129,7 +129,7 @@
                                         </span>
                                     </div>
                                     <div class="shopping-cart-btn btn-hover text-center">
-                                        <a class="default-btn" href="checkout.html">
+                                        <a class="default-btn" href="{{route('home.checkout.index')}}">
                                             ثبت سفارش
                                         </a>
                                         <a class="default-btn" href="{{route('home.cart.index')}}">
@@ -261,7 +261,7 @@
                                         </span>
                                     </div>
                                     <div class="shopping-cart-btn btn-hover text-center">
-                                        <a class="default-btn" href="checkout.html">
+                                        <a class="default-btn" href="{{route('home.checkout.index')}}">
                                             ثبت سفارش
                                         </a>
                                         <a class="default-btn" href="{{route('home.cart.index')}}">

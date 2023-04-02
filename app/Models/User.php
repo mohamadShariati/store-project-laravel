@@ -56,5 +56,10 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class)->where('approved',1);
     }
 
+    public function address()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
+
 
 }

@@ -32,9 +32,11 @@ class Product extends Model
     protected $guarded = [];
     protected $appends = ['quantity_check','sale_check','price_check'];
 
+
+
     public function getQuantityCheckAttribute()
     {
-        return $this->variations()->where('quantity','>',0)->first() ?? 0;
+        return $this->variations()->where('quantity', '>', 0)->first() ?? 0;
     }
 
     public function getSaleCheckAttribute()

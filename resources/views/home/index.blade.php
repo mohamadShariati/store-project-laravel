@@ -359,6 +359,7 @@
                             <div class="product-details-content quickview-content">
                                 <h2 class="text-right mb-4">{{ $product->name }}</h2>
                                 <div class="product-details-price variation-price">
+
                                     @if($product->quantity_check)
                                         @if($product->sale_check)
                                             <span class="new">

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Models\UserAddress;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\City;
-use App\Models\Province;
+use Illuminate\Http\Request;
 
-class CheckoutController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,20 +14,13 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        if(!auth()->user())
-        {
-            alert()->warning('دقت کنید','ابتدا باید وارد سایت شوید');
-            return redirect()->route('home.index');
-        }
-        if(\Cart::isEmpty())
-        {
-            alert()->warning('دقت کنید','سبد خرید شما خالی می باشد');
-            return redirect()->route('home.index');
-        }
-        $provinces=Province::all();
-        $addresses=UserAddress::where('user_id',auth()->id())->get();
+        //
+    }
 
-        return view('home.checkout.index',compact('addresses','provinces'));
+
+    public function userProfileIndex()
+    {
+        return view('home.users_profile.orders');
     }
 
     /**

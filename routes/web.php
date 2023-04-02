@@ -3,22 +3,26 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Home\CartController;
 use App\Http\Controllers\Home\HomeController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Home\AddressController;
 use App\Http\Controllers\Home\CompareController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Home\CheckoutController;
 use App\Http\Controllers\Home\WishlistController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
-use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Home\UserProfileController;
 use App\Http\Controllers\Admin\ProductImageController;
-use App\Http\Controllers\Home\CartController;
 use App\Http\Controllers\Home\CommentController as HomeCommentController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Home\CategoryController as HomeCategoryController;
+use App\Http\Controllers\Home\OrderController;
+use App\Http\Controllers\Home\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,12 +71,26 @@ Route::prefix('profile')->name('home.')->group(function(){
     Route::get('/',[UserProfileController::class,'index'])->name('users_profile.index');
     Route::get('/comments',[HomeCommentController::class,'usersProfileIndex'])->name('comments.users_profile.index');
     Route::get('/wishlist',[WishlistController::class,'userProfileIndex'])->name('wishlist.user_profile.index');
-    // Route::get('/compare',[CompareController::class,'userProfileIndex'])->name('compare.user_profile.index');
+    Route::get('/orders',[OrderController::class,'userProfileIndex'])->name('orders.user_profile.index');
+
+    Route::get('/addresses',[AddressController::class,'index'])->name('addresses.index');
 });
 
 Route::get('/',[HomeController::class,'index'])->name('home.index');
 Route::get('/categories/{category:slug}',[HomeCategoryController::class,'show'])->name('home.categories.show');
 Route::post('/comments/{product}',[HomeCommentController::class , 'store'])->name('home.comments.store');
+
+//address
+Route::post('/create-address',[AddressController::class,'store'])->name('home.address.store');
+Route::put('/update-address/{userAddress}',[AddressController::class,'update'])->name('home.address.update');
+Route::get('/get-province-cities-list',[AddressController::class,'getProvinceCitiesList']);
+
+
+
+//PAYMENT
+Route::post('/payment',[PaymentController::class,'payment'])->name('home.payment');
+Route::get('/payment-verify/{gatewayName}',[PaymentController::class,'paymentVerify'])->name('home.payment_verify');
+
 
 //wishlist
 Route::get('/add-to-wishlist/{product}',[WishlistController::class,'add'])->name('home.wishlist.add');
@@ -90,6 +108,10 @@ Route::get('/remove-from-cart/{id}',[CartController::class,'remove'])->name('hom
 Route::get('/clear-cart',[CartController::class,'clear'])->name('home.cart.clear');
 Route::put('/update-cart',[CartController::class,'update'])->name('home.cart.update');
 Route::post('/check-coupon',[CartController::class,'checkCoupon'])->name('home.coupons.check');
+
+//CHECKOUT
+Route::get('/checkout',[CheckoutController::class,'index'])->name('home.checkout.index');
+
 
 Route::get('/products/{product:slug}',[HomeProductController::class,'show'])->name('home.products.show');
 

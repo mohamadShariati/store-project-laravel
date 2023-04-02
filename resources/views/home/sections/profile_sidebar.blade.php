@@ -5,12 +5,12 @@
         پروفایل
     </a>
 
-    <a href="#orders" data-toggle="tab">
+    <a href="{{route('home.orders.user_profile.index')}}" class="{{request()->is('profile/orders') ? 'active' : ''}}">
         <i class="sli sli-basket ml-1"></i>
         سفارشات
     </a>
 
-    <a href="#address" data-toggle="tab">
+    <a href="{{route('home.addresses.index')}}" class="{{request()->is('profile/addresses') ? 'active' : ''}}">
         <i class="sli sli-map ml-1"></i>
         آدرس ها
     </a>

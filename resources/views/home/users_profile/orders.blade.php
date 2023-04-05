@@ -13,7 +13,7 @@
                 <li>
                     <a href="index.html">صفحه ای اصلی</a>
                 </li>
-                <li class="active"> پروفایل </li>
+                <li class="active"> سفارشات </li>
             </ul>
         </div>
     </div>
@@ -40,6 +40,11 @@
                                     <div class="myaccount-content">
                                         <h3>سفارشات</h3>
                                         <div class="myaccount-table table-responsive text-center">
+                                            @if ($orders->isEmpty())
+                                            <div class="alert alert-danger">
+                                                لیست سفارشات شما خالی است
+                                            </div>
+                                            @else
                                             <table class="table table-bordered">
                                                 <thead class="thead-light">
                                                     <tr>
@@ -51,47 +56,24 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @foreach ($orders as $key => $order)
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td> 22 تیر 1399 </td>
-                                                        <td>Pending</td>
+                                                        <td>{{$orders->firstItem()+$key}}</td>
+                                                        <td> {{verta($order->created_at)->format('%d %B, %Y')}}</td>
+                                                        <td>{{$order->payment_status}}</td>
                                                         <td>
-                                                            30000
+                                                        {{number_format($order->paying_amount)}}
                                                             تومان
                                                         </td>
                                                         <td><a href="#" data-toggle="modal"
-                                                                data-target="#ordersDetiles"
+                                                                data-target="#ordersDetiles-{{$order->id}}"
                                                                 class="check-btn sqr-btn "> نمایش جزئیات </a>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td> 22 تیر 1399 </td>
-                                                        <td>Approved</td>
-                                                        <td>
-                                                            50000
-                                                            تومان
-                                                        </td>
-                                                        <td><a href="#" data-toggle="modal"
-                                                                data-target="#ordersDetiles"
-                                                                class="check-btn sqr-btn "> نمایش جزئیات </a>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td> 22 تیر 1399 </td>
-                                                        <td>On Hold</td>
-                                                        <td>
-                                                            20000
-                                                            تومان
-                                                        </td>
-                                                        <td><a href="#" data-toggle="modal"
-                                                                data-target="#ordersDetiles"
-                                                                class="check-btn sqr-btn "> نمایش جزئیات </a>
-                                                        </td>
-                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
+                                            @endif
                                         </div>
                                     </div>
                                 <!-- Single Tab Content End -->
@@ -107,7 +89,8 @@
 <!-- my account wrapper end -->
 
 <!-- Modal Order -->
-<div class="modal fade" id="ordersDetiles" tabindex="-1" role="dialog">
+@foreach ($orders as $order)
+<div class="modal fade" id="ordersDetiles-{{$order->id}}" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -131,61 +114,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach ($order->items()->with('product')->get() as $item)
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <a href="#"><img src="assets/img/cart/cart-3.svg" alt=""></a>
+                                                <a href="{{route('home.products.show',$item->product->slug)}}"><img width="120" src="{{asset('upload/files/products/images/'.$item->product->primary_image)}}" alt=""></a>
                                             </td>
-                                            <td class="product-name"><a href="#"> لورم ایپسوم </a></td>
+                                            <td class="product-name"><a href="{{route('home.products.show',$item->product->slug)}}"> {{$item->product->name}}  </a></td>
                                             <td class="product-price-cart"><span class="amount">
-                                                    20000
+                                                    {{number_format($item->price)}}
                                                     تومان
                                                 </span></td>
                                             <td class="product-quantity">
-                                                2
+                                                {{$item->quantity}}
                                             </td>
                                             <td class="product-subtotal">
-                                                40000
+                                                {{number_format($item->subtotal)}}
                                                 تومان
                                             </td>
                                         </tr>
+                                        @endforeach
 
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img src="assets/img/cart/cart-4.svg" alt=""></a>
-                                            </td>
-                                            <td class="product-name"><a href="#"> لورم ایپسوم متن ساختگی </a>
-                                            </td>
-                                            <td class="product-price-cart"><span class="amount">
-                                                    10000
-                                                    تومان
-                                                </span></td>
-                                            <td class="product-quantity">
-                                                3
-                                            </td>
-                                            <td class="product-subtotal">
-                                                30000
-                                                تومان
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#"><img src="assets/img/cart/cart-5.svg" alt=""></a>
-                                            </td>
-                                            <td class="product-name"><a href="#"> لورم ایپسوم </a></td>
-                                            <td class="product-price-cart"><span class="amount">
-                                                    40000
-                                                    تومان
-                                                </span></td>
-                                            <td class="product-quantity">
-                                                2
-                                            </td>
-                                            <td class="product-subtotal">
-                                                80000
-                                                تومان
-                                            </td>
-                                        </tr>
 
                                     </tbody>
                                 </table>
@@ -199,5 +147,6 @@
         </div>
     </div>
 </div>
+@endforeach
 <!-- Modal end -->
 @endsection

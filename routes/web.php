@@ -5,11 +5,13 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Home\CartController;
 use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\OrderController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Home\AddressController;
 use App\Http\Controllers\Home\CompareController;
+use App\Http\Controllers\Home\PaymentController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Home\CheckoutController;
@@ -17,12 +19,12 @@ use App\Http\Controllers\Home\WishlistController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Home\UserProfileController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Home\CommentController as HomeCommentController;
 use App\Http\Controllers\Home\ProductController as HomeProductController;
 use App\Http\Controllers\Home\CategoryController as HomeCategoryController;
-use App\Http\Controllers\Home\OrderController;
-use App\Http\Controllers\Home\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,8 @@ Route::prefix('admin-panel/management')->name('admin.')->group(function(){
     Route::resource('banners',BannerController::class);
     Route::resource('comments',CommentController::class);
     Route::resource('coupons',CouponController::class);
+    Route::resource('orders',AdminOrderController::class);
+    Route::resource('transactions',TransactionController::class);
 
     //approve comment
     Route::get('/comments/{comment}/change-approve',[CommentController::class,'changeApproved'])->name('comments.change-approve');
